@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,7 +59,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ManualTestExeForm\TestTargetExeForm.csproj">
+    <ProjectReference Include="..\TestTargetExeForm\TestTargetExeForm.csproj">
       <Project>{0370fa44-3aa9-4f5c-a30b-76c1a42945e8}</Project>
       <Name>TestTargetExeForm</Name>
     </ProjectReference>

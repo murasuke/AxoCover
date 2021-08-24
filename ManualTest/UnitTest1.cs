@@ -11,6 +11,7 @@ namespace ManualTest
         {
             // Show form, and test manualy
             TestTargetExeForm.Program.Main();
+            
         }
     }
 }
