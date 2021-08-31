@@ -2,17 +2,20 @@
 
 ## 1.前書き
 
-Visual Studioアドイン[AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)はVisual Studio 2012 ～ 2017で利用できる、カバレッジ測定ツールです。Visual Studio Enterpriseであればカバレッジ測定機能が組み込まれていますがとても高額です。
-Community版でも組み込める無償ツールはとてもありがたいです。
+Visual Studioアドイン[AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)はVisual Studio 2012 ～ 2017で利用できるカバレッジ測定ツールです。
+Community版でも組み込める無償ツールはとてもありがたいです。（Visual Studio Enterpriseにはカバレッジ測定機能が組み込まれていますがとても高額）
 
-**ツールの特徴**
+**AxoCoverの特徴**
 
 * ユニットテストを自動で検出します。
 * ユニットテストを実行すると、クラス、メソッド毎にカバレッジ率を表示することができる。
 * カバレッジ測定自体はコマンドラインツールの[opencover](https://github.com/OpenCover/opencover)を利用しているようです。アドオンとして統合されているAxoCoverを使えば、細かい設定を意識せずに測定ができます。
 
+  ※通常は、カバレッジ測定のために、ユニットテストを書く必要があります。実は
+少し工夫をすることで、手動でテストを行い、カバレッジ測定することも可能です。やり方は最後の方で記載します。
 
   ![AxoCover0.png](./img/AxoCover0.png)
+
 
 ---
 
@@ -30,7 +33,7 @@ VS2019で非推奨となったAPIを利用しているため起動時に警告�
 
 
 ## 2.AxoCoverインストール方法
-Visual Studio 2019の「拡張機能の管理」からはインストールができないため、拡張機能(.vsix)をgithubからダウンロードします。
+Visual Studio 2019の「拡張機能の管理」からはインストールができないため、拡張機能(.vsix)をgithubからダウンロードします。(VS2017以前も下記のやり方でインストール可能です)
 
 
 * 1.`AxoCover.vsix`のダウンロード
@@ -235,11 +238,50 @@ Visual Studio 2019の「拡張機能の管理」からはインストールが�
 
   ![result4.png](./img/result4.png)
 
-## その他調査
+## 4.手動操作(テスト)時にカバレッジ測定を行う方法について
 
+AxoCoverは、ユニットテストを自動的に検出して実行するのと同時にカバレッジ測定を行います。
+これでは、個別にプログラムを起動して手動で動作確認を行うことができません。
+
+実は、ユニットテストコードからテスト対象フォームを起動し、手動でテストを行うことでカバレッジを測定することが可能です。
+
+
+* テスト対象フォーム起動ユニットテストコード
+```csharp
+namespace ManualTest
+{
+    [TestClass]
+    public class UnitTest1
+    {
+        [TestMethod]
+        public void ManualTest()
+        {
+            // Show form, and test manualy
+            TestTargetExeForm.Program.Main();
+            
+        }
+    }
+}
+```
+
+* フォーム起動用ユニットテストを選んでテストを実行します。
+
+  ![AxoCover11.png](./img/AxoCover11.png)
+
+
+
+
+* テスト対象フォームが起動します。手入力で「1 - 2」を入力して「計算ボタン」を押下します。
+
+  ![AxoCover12.png](./img/AxoCover12.png)
+
+* プログラムを「×」ボタンで閉じるjとカバレッジ測定結果が表示されます。引き算のみ実行されたことがわかります。
+
+  ![AxoCover13.png](./img/AxoCover13.png)
+## その他調査
 
 |  確認内容  |  結果  | 補足 |
 | ---- | ---- | ---- |
-| テスト対象が.NET2.0、UnitTestが.NET4.8の場合でも動作するか？ | 動作する  | |
-| UnitTestは.NET4.0でも動作するか？  |  動作しない  |　MSTest.TestFrameworkが.NET4.5以降を要求するため |
-| プロジェクト参照、通常のdll参照どちらでも動作するか？ | 動作する |  |
+| テスト対象が.NET2.0、UnitTestが.NET4.8の場合でもカバレッジ測定は可能か？ | 可能  | |
+| UnitTestプロジェクトのフレームワークを.NET4.0にしても測定は可能か？  |  不可  |　MSTest.TestFrameworkが.NET4.5以降を要求するため |
+| プロジェクト参照、通常のdll参照どちらでもカバレッジ測定はできるか？ | 可能 |  |
